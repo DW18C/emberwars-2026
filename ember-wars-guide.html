@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Palmon Survival - Ember Wars Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Orbitron:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Rajdhani', 'Segoe UI', Arial, sans-serif;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+    background:
+      radial-gradient(circle at 10% -10%, rgba(212,175,55,0.16) 0%, transparent 40%),
+      radial-gradient(circle at 100% 10%, rgba(212,175,55,0.10) 0%, transparent 45%),
+      #07070a;
+    background-attachment: fixed;
+    color: #e6e6e6;
+    line-height: 1.65;
+    min-height: 100vh;
+    font-size: 17px;
+  }
+  .hero {
+    text-align: center;
+    padding: 50px 20px 30px;
+    position: relative;
+  }
+  .hero::before {
+    content: "🔥";
+    display: block;
+    font-size: 2.4em;
+    margin-bottom: 6px;
+    filter: drop-shadow(0 0 14px rgba(255,140,66,0.6));
+  }
+  h1 {
+    font-family: 'Orbitron', sans-serif;
+    margin: 0;
+    font-size: 2.3em;
+    font-weight: 800;
+    background: linear-gradient(90deg, #d4af37, #f3e4a8, #d4af37);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: 1px;
+    text-shadow: 0 0 30px rgba(212,175,55,0.2);
+  }
+  .hero p { color: #9a9488; margin: 12px 0 0; font-size: 1.05em; letter-spacing: 0.3px; }
+  h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.15em;
+    color: #d4af37;
+    margin: 28px 0 16px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid rgba(212,175,55,0.3);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h3 { color: #e8c766; margin: 0; font-size: 1.15em; }
+  table { width: 100%; border-collapse: collapse; margin: 15px 0; border-radius: 10px; overflow: hidden; }
+  th, td { border: 1px solid #262220; padding: 11px 14px; text-align: left; }
+  th { background: #1c1810; color: #d4af37; font-family: 'Orbitron', sans-serif; font-size: 0.85em; letter-spacing: 0.5px; }
+  tr:nth-child(even) { background: #16140f; }
+  tr { background: #100e0a; transition: background 0.15s; }
+  tbody tr:hover { background: #221d13; }
+  .tip { background: linear-gradient(90deg, rgba(76,175,80,0.16), rgba(76,175,80,0.03)); border-left: 4px solid #4caf50; padding: 14px 18px; margin: 16px 0; border-radius: 0 10px 10px 0; }
+  .warn { background: linear-gradient(90deg, rgba(231,76,60,0.16), rgba(231,76,60,0.03)); border-left: 4px solid #e74c3c; padding: 14px 18px; margin: 16px 0; border-radius: 0 10px 10px 0; }
+  code { background: #221d13; padding: 2px 6px; border-radius: 4px; color: #d4af37; }
+  ol, ul { margin-left: 6px; padding-left: 20px; }
+  li { margin: 6px 0; }
+  .badge { display: inline-block; background: linear-gradient(90deg, #d4af37, #f3e4a8); color: #1a1200; padding: 5px 14px; border-radius: 14px; font-size: 0.8em; font-weight: 700; font-family: 'Orbitron', sans-serif; }
+
+  /* Sticky nav tabs */
+  .tabs {
+    display: flex;
+    gap: 8px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 14px 0;
+    margin-bottom: 10px;
+    background: rgba(7,7,10,0.85);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(212,175,55,0.15);
+  }
+  .tab-btn {
+    flex: 1;
+    background: rgba(212,175,55,0.04);
+    color: #a89f8c;
+    border: 1px solid rgba(212,175,55,0.15);
+    padding: 13px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9em;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+  }
+  .tab-btn:hover { background: rgba(212,175,55,0.1); transform: translateY(-2px); }
+  .tab-btn.active-overview,
+  .tab-btn.active-attack,
+  .tab-btn.active-defense { background: linear-gradient(135deg, #d4af37, #a8872c); color: #15110a; border-color: transparent; box-shadow: 0 6px 18px rgba(212,175,55,0.4); }
+  .tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease-in;
+    background: rgba(212,175,55,0.03);
+    border: 1px solid rgba(212,175,55,0.12);
+    border-radius: 16px;
+    padding: 8px 26px 28px;
+  }
+  .tab-content.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Stat grid for Overview */
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin: 16px 0 24px; }
+  .stat-card {
+    background: rgba(212,175,55,0.04);
+    border: 1px solid rgba(212,175,55,0.15);
+    border-radius: 12px;
+    padding: 14px 16px;
+    transition: transform 0.15s, border-color 0.15s;
+  }
+  .stat-card:hover { transform: translateY(-3px); border-color: rgba(212,175,55,0.5); }
+  .stat-card .icon { font-size: 1.4em; margin-bottom: 6px; display: block; }
+  .stat-card .label { font-size: 0.92em; color: #c9c2b2; }
+
+  /* Step cards for Attack/Defense */
+  .step { display: flex; gap: 16px; margin: 22px 0; }
+  .step-num {
+    flex: 0 0 auto;
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 1em;
+    color: #15110a;
+  }
+  #attack .step-num, #defense .step-num { background: linear-gradient(135deg, #d4af37, #a8872c); box-shadow: 0 0 14px rgba(212,175,55,0.5); }
+  .step-body { flex: 1; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+<h1>PALMON SURVIVAL — EMBER WARS</h1>
+</div>
+
+<div class="tabs">
+  <button class="tab-btn active-overview" id="btn-overview" onclick="showTab('overview')">📋 OVERVIEW</button>
+  <button class="tab-btn" id="btn-attack" onclick="showTab('attack')">⚔️ ATTACK DAY</button>
+  <button class="tab-btn" id="btn-defense" onclick="showTab('defense')">🛡️ DEFENSE DAY</button>
+</div>
+
+<div id="overview" class="tab-content active">
+
+<h2>📋 Overview</h2>
+<div class="stat-grid">
+  <div class="stat-card"><span class="icon">🗓️</span><span class="label">4-week seasonal PvP event starting week 4 of Season 1</span></div>
+  <div class="stat-card"><span class="icon">⚔️</span><span class="label">Factions: <strong>Frost Legion</strong> vs <strong>Ember Alliance</strong> (reassigned weekly)</span></div>
+  <div class="stat-card"><span class="icon">🏰</span><span class="label">Top 16 guilds per server (by embers) join each faction — 32 guilds per faction</span></div>
+  <div class="stat-card"><span class="icon">🔁</span><span class="label">Two rounds per week: each faction attacks once</span></div>
+</div>
+
+<h3>Qualification Requirements</h3>
+<ul>
+  <li>Guild holds ≥ 20,000 embers</li>
+  <li>Guild has built a guild generator</li>
+  <li>Guild ranks top 16 by embers on its server</li>
+</ul>
+
+<h2>🗓️ Weekly Schedule</h2>
+<table>
+<tr><th>Stage</th><th>Timing</th><th>What Happens</th></tr>
+<tr><td>1. Declare War</td><td>Tuesday (24h)</td><td>R4+ officers declare war on guilds in their bracket</td></tr>
+<tr><td>2. Invite Reinforcements</td><td>Wed 13:00</td><td>Defenders can invite allied guilds if multi-attacked</td></tr>
+<tr><td>3. Preparation</td><td>Wed 13:00 (30 min)</td><td>Defenders locked in place; attackers position Paragon</td></tr>
+<tr><td>4. Battle</td><td>Wed 13:30 (20–40 min)</td><td>Attackers try to destroy the generator; defenders hold</td></tr>
+<tr><td>5. Claim Rewards</td><td>Post-battle</td><td>Chests, tokens, embers for winners/top contributors</td></tr>
+</table>
+
+<h2>🏆 Why Help Other Guilds? (Reward Structure)</h2>
+<p>There are two separate reward tracks at the end of the event:</p>
+<ol>
+  <li><strong>Individual performance</strong> — your own personal contribution</li>
+  <li><strong>Server-wide ember total</strong> — how many embers the whole server accumulated collectively</li>
+</ol>
+<p><strong>Goal: finish #1 in both categories.</strong> Helping neighboring guilds cancel enemy comets protects the server's collective ember pool — directly supporting reward track #2.</p>
+
+<h2>💰 How to Get Embers</h2>
+<ul>
+  <li>Capture and hold map structures</li>
+  <li>Occupy coal mines (levels 1–6) and shrines/sanctums — boosts generator upgrades too</li>
+  <li>Win PvP events (Ember Wars, Server Showdowns)</li>
+  <li>Burn and loot enemy generators during the battle stage</li>
+</ul>
+
+<h2>🧊 Camp Temperature Management</h2>
+<ul>
+  <li>Each dispatched squad reduces camp temperature by -3°C</li>
+  <li>Below -20°C for too long = camp freezes (no rallies/teleports)</li>
+  <li>Rush Brick Kilns to level 15 for generator Overdrive fuel</li>
+  <li>Receiving 1,000 coal from guildmates raises temperature by 4°C</li>
+</ul>
+
+</div>
+
+<div id="attack" class="tab-content">
+
+<h2>⚔️ ATTACK DAY — Step by Step</h2>
+
+<div class="step">
+  <div class="step-num">1</div>
+  <div class="step-body">
+    <h3>Pre-War Prep</h3>
+    <ul>
+      <li>Switch to <strong>Fighter class</strong> (Class Reset Scroll) <em>(optional — recommended once comfortable, not required to join)</em></li>
+      <li>Skill into <strong>Cheerleader</strong> (attack buff) + <strong>Healing Fruits</strong> <em>(optional — recommended once comfortable, not required to join)</em></li>
+      <li>Max out troop training before the battle window opens</li>
+      <li>Heal your hospital fully</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">2</div>
+  <div class="step-body">
+    <h3>Launching the Comet (Main Attack Method)</h3>
+    <ol>
+      <li>Assign one player to carry the <strong>Paragon</strong> and relocate them roughly 180–200km from the target generator</li>
+      <li>Surround the Paragon carrier with as many guild members as possible</li>
+      <li>Pop your own <strong>8-hour shields ("bubbles")</strong> while protecting the Paragon — being shielded means you can focus on protecting without worrying about being attacked</li>
+      <li><strong>Only send your FIRST team</strong> to protect the carrier. If that team is defeated, send it back again immediately</li>
+      <li>Activate the comet — it takes <strong>6 minutes</strong> to charge</li>
+      <li>The <strong>Paragon carrier cannot be shielded</strong> — the moment they activate the comet, enemies will rush to attack them to try to stop the launch, so the protectors must intercept anyone attacking the carrier at that exact moment</li>
+    </ol>
+    <div class="tip">
+      <strong>Tip — Ophidian Ability:</strong> With 1 minute left before the comet falls, activate the Ophidian ability and give yourself <strong>2–3 health bars</strong>. This helps you survive teleporting next to the enemy generator right after the comet lands.
+    </div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">3</div>
+  <div class="step-body">
+    <h3>When the Comet Lands</h3>
+    <ul>
+      <li>The comet teleports all enemy bases away from the target area</li>
+      <li>Immediately teleport your strongest squads onto the freed tiles around the enemy generator</li>
+      <li>Attack the generator with <strong>all squadrons</strong> until destroyed</li>
+      <li><strong>100 successful attacks</strong> are required to destroy the generator</li>
+      <li>If executed correctly, victory typically comes <strong>2–3 minutes</strong> after the comet falls</li>
+    </ul>
+    <div class="warn">
+      <strong>Discipline Rule:</strong> Ignore anyone who teleports next to you (unless they're especially disruptive). Stay focused exclusively on attacking the rival generator — don't get pulled into side-fights.
+    </div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">4</div>
+  <div class="step-body">
+    <h3>Alternate (Slower) Method</h3>
+    <p>Attack the generator directly from nearby positions if you can physically reach them without a comet. Works, but takes much longer than the Comet Strike method.</p>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">5</div>
+  <div class="step-body">
+    <h3>After Winning</h3>
+    <p>Move as quickly as possible to help neighboring guilds still fighting. Redeploy your guild to assist other servers/guilds under attack (e.g., once your own target is defeated, move on to help another guild's fight).</p>
+  </div>
+</div>
+
+</div>
+
+<div id="defense" class="tab-content">
+
+<h2>🛡️ DEFENSE DAY — Step by Step</h2>
+
+<p>Defense Day isn't just about holding your own generator — it's an <strong>active, roaming counter-operation</strong> to protect your server's neighboring guilds too.</p>
+
+<div class="step">
+  <div class="step-num">1</div>
+  <div class="step-body">
+    <h3>Disable the Enemy Paragon Carrier (Targeting Your Generator)</h3>
+    <ul>
+      <li>Smaller camps and players who can't actively participate occupy every teleport tile surrounding your generator (the "Hive" strategy) — this keeps gaps from opening up near the generator</li>
+      <li><strong>Shield these tile-holders</strong> so enemy camps can't attack and teleport them away, which would leave a tile open right next to the generator</li>
+      <li>Place <strong>Cheerleader</strong> buff directly under the generator, if your guild has one available</li>
+      <li>With the Hive held and shielded, stronger players are freed up to leave and actively hunt the enemy Paragon carrier</li>
+      <li>Identify the enemy player carrying the Paragon aimed at your generator</li>
+      <li>Attack that player directly — reduce the <strong>durability bar of their base</strong> — this <strong>cancels their comet launch</strong> entirely before it finishes charging (fast individual marches, not slow rallies)</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">2</div>
+  <div class="step-body">
+    <h3>Defend Against a Direct March (No Comet)</h3>
+    <p>Canceling the enemy's comet stops that specific launch, but it doesn't make your generator safe — they can still follow up with a regular direct march/attack (the "Alternate Method"). Stay and hold your ground in case this happens:</p>
+    <ul>
+      <li>Re-teleport onto cleared tiles immediately</li>
+      <li>Dismiss non-combat squads</li>
+      <li>Split roles between garrison-refill and counter-attack</li>
+    </ul>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">3</div>
+  <div class="step-body">
+    <h3>Help Other Guilds (Roaming Support)</h3>
+    <p>Only move on to this once you're confident your own generator is safe.</p>
+    <ol>
+      <li>Identify the enemy player carrying the Paragon for a comet attack on an allied/neighboring guild</li>
+      <li>Attack that player directly — reduce the <strong>durability bar of their base</strong> — this cancels their comet launch</li>
+      <li>Move on to help the next guild under threat</li>
+    </ol>
+  </div>
+</div>
+
+</div>
+
+<p style="text-align:center; color:#666; margin-top:40px;"><span class="badge">🔥 Ember Wars</span> <span style="margin:0 6px;">⚔️</span> <span class="badge" style="background:linear-gradient(90deg,#4a90d9,#9ad1ff); color:#071a2b;">❄️ Dawn of the Ice Age</span></p>
+
+<script>
+  function showTab(tab) {
+    document.getElementById('overview').classList.toggle('active', tab === 'overview');
+    document.getElementById('attack').classList.toggle('active', tab === 'attack');
+    document.getElementById('defense').classList.toggle('active', tab === 'defense');
+    document.getElementById('btn-overview').classList.toggle('active-overview', tab === 'overview');
+    document.getElementById('btn-attack').classList.toggle('active-attack', tab === 'attack');
+    document.getElementById('btn-defense').classList.toggle('active-defense', tab === 'defense');
+  }
+</script>
+
+</body>
+</html>
